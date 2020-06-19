@@ -37,7 +37,7 @@ function normal() {
 
     // Refresh Graph;
     let max = 0;
-    let min = 1000000000000;
+    let min = 0;
     sample.forEach((value) => {
         let temp = parseFloat(value.value);
         if (temp > max) {
@@ -74,7 +74,7 @@ function uniform() {
 
     // Refresh Graph;
     let max = 0;
-    let min = 1000000000000;
+    let min = 0;
     sample.forEach((value) => {
         let temp = parseFloat(value.value);
         if (temp > max) {
@@ -110,7 +110,7 @@ function exponential() {
 
     // Refresh Graph;
     let max = 0;
-    let min = 1000000000000;
+    let min = 0;
     sample.forEach((value) => {
         let temp = parseFloat(value.value);
         if (temp > max) {
