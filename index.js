@@ -1,47 +1,5 @@
-
-// const sample = [{
-//     id: 'Rust',
-//     value: 78.9,
-// },
-// {
-//     id: 'Kotlin',
-//     value: 75.1,
-// },
-// {
-//     id: 'Python',
-//     value: 68.0,
-// },
-// {
-//     id: 'TypeScript',
-//     value: 67.0,
-// },
-// {
-//     id: 'Go',
-//     value: 65.6,
-// },
-// {
-//     id: 'Swift',
-//     value: 65.1,
-// },
-// {
-//     id: 'JavaScript',
-//     value: 61.9,
-// },
-// {
-//     id: 'C#',
-//     value: 60.4,
-// },
-// {
-//     id: 'F#',
-//     value: 59.6,
-//     color: '#008fc9'
-// },
-// {
-//     id: 'Clojure',
-//     value: 59.6,
-// }
-// ];
-
+// TODO
+// Fix x axis placement and graph placement for negative numbers
 let sample = [];
 
 function randomize() {
