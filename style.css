@@ -22,6 +22,18 @@ svg {
   fill: #80cbc4;
 }
 
+button {
+  background-color: #2F4A6D; 
+  border: none;
+  color: white;
+  margin: 1rem;
+  padding: 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 text {
   font-size: 12px;
   fill: #fff;
