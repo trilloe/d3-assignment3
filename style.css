@@ -73,7 +73,11 @@ text.source {
   font-size: 10px;
 }
 
-form {
-    width: 75%;
-    padding: 4rem;
+input{
+  block-size: auto;
+  width: 70px;
+}
+
+table{
+  width: max-content;
 }

@@ -1,29 +1,82 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Bar chart with D3.js</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-    </script>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    = <script src="./index.js"></script>
-    <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Bar chart with D3.js</title>
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <script src="https://d3js.org/d3-random.v2.min.js"></script>
+  <script src="d3.v5.min.js"></script>
+  = <script src="./index.js"></script>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <div id='layout'>
-        <div id='container'>
-            <svg onload="randomize()" id="graphSVG"></svg>
-        </div>
+  <div id='layout'>
+    <div id='container'>
+      <svg onload="randomize()" id="graphSVG"></svg>
     </div>
     <button type="button" class="btn btn-dark" onclick="randomize()">Randomize Data</button>
-    <!-- <form action="">
+
+  </div>
+  <!-- <form id="form"> -->
+    <h3><U>CUSTOMIZATION</U></h3>
+    <table cellspacing="0" cellpadding="6" style="padding:25px; border:1px dotted #ccc; ">
+      <tr>
+        <td><label>Sample Size:</label></td>
+        <td><input id="sample_size" name="input1" type="number" placeholder="20"/></td>
+      </tr>
+      <tr>
+        <td><label>Standard Deviation:</label></td>
+        <td>
+          <input id="replacement" type="radio" name="question" value="true" checked="true"/>
+          <label>Without Replacement</label> <br>
+          <input id="replacement" type="radio" name="question" value="false"/>
+          <label>With Replacement</label>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Normal Distribution with:</label></td>
+        <td><label>Mean = </label></td>
+        <td><input id="n_mean" name="n_mean" type="number" placeholder="0"/></td>
+        <td><label>Standard Deviation = </label></td>
+        <td><input id="n_sd" name="n_sd" type="number" placeholder="1"/></td>
+        <td><button type="submit" onclick="normal()">Normal Distribution</button></td>
+
+      </tr>
+      <tr>
+        <td><label>Uniform Distribution with:</label></td>
+        <td><label>Minimum = </label></td>
+        <td><input id="u_min" name="input4" type="number" placeholder="0"/></td>
+        <td><label>Maximum = </label></td>
+        <td><input id="u_max" name="input5" type="number" placeholder="100"/></td>
+        <td><button type="submit" onclick="uniform()">Uniform Distribution</button></td>
+      </tr>
+      <tr>
+        <td><label>Exponential Distribution with:</label></td>
+        <td><label>Lambda = </label></td>
+        <td><input id="lamb" name="input6" type="number" placeholder="1"/></td>
+        <td><button type="submit" onclick="exponential()">Exponential Distribution</button></td>
+
+      </tr>
+      <!-- <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><button type="submit" onclick="submitForm()">Submit</button></td>
+        </tr> -->
+    </table>
+  <!-- </form> -->
+  <!-- <form action="">
         <label for="sample_size">Sample Size</label>
         <input type="text" name="sample_size" id="sample_size" placeholder="default = 20">
         <label for="replacement">Replacement</label>
@@ -31,7 +84,7 @@
         Normal Distribution
         <input type="text" name="mean" id="mean" placeholder="mean">
     </form> -->
-    <form>
+  <!-- <form>
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -46,7 +99,7 @@
           <label class="form-check-label" for="exampleCheck1">Check me out</label>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+      </form> -->
 </body>
 
 </html>

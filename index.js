@@ -1,3 +1,4 @@
+
 // const sample = [{
 //     id: 'Rust',
 //     value: 78.9,
@@ -43,7 +44,158 @@
 
 let sample = [];
 
-function generateGraph() {
+function randomize() {
+    // Create Data
+    let data = [];
+    for (let i = 1; i <= 100; ++i) {
+        data.push(i);
+    }
+
+    // Sample Data
+    sampler(data, 20, false);
+
+    // Refresh Graph
+    graphRefresh(sample);
+}
+
+function normal() {
+    // Collect Data
+    let sample_size = (!document.getElementById("sample_size").value) ? 20 : document.getElementById("sample_size").value;
+    let replace = document.querySelector('input[name="question"]:checked').value;
+
+    let mean = (!document.getElementById("n_mean").value) ? 0 : document.getElementById("n_mean").value;
+    let sd = (!document.getElementById("n_sd").value) ? 1 : document.getElementById("n_sd").value;
+    console.log(`${mean}   ${sd}`);
+
+    // Create Data
+    let data = []
+
+    for (let i = 1; i <= 100; ++i) {
+        data.push(d3.randomNormal(mean, sd)().toFixed(2));
+    }
+
+    // Sample Data
+    sampler(data, sample_size, Boolean(replace));
+
+    // Refresh Graph;
+    let max = 0;
+    let min = 1000000000000;
+    sample.forEach((value) => {
+        let temp = parseFloat(value.value);
+        if (temp > max) {
+            max = temp;
+        }
+        if (temp < min) {
+            min = temp;
+        }
+        console.log(value)
+    });
+    console.log(`${max} ${min}`);
+
+    graphRefresh(sample, max + 1, min - 1);
+
+}
+
+function uniform() {
+    // Collect Data
+    let sample_size = (!document.getElementById("sample_size").value) ? 20 : document.getElementById("sample_size").value;
+    let replace = document.querySelector('input[name="question"]:checked').value;
+
+    let u_min = (!document.getElementById("u_min").value) ? 0 : document.getElementById("u_min").value;
+    let u_max = (!document.getElementById("u_max").value) ? 100 : document.getElementById("u_max").value;
+
+    // Create Data
+    let data = []
+
+    for (let i = 1; i <= 100; ++i) {
+        data.push(d3.randomUniform(u_min, u_max)().toFixed(2));
+    }
+
+    // Sample Data
+    sampler(data, sample_size, Boolean(replace));
+
+    // Refresh Graph;
+    let max = 0;
+    let min = 1000000000000;
+    sample.forEach((value) => {
+        let temp = parseFloat(value.value);
+        if (temp > max) {
+            max = temp;
+        }
+        if (temp < min) {
+            min = temp;
+        }
+        console.log(value)
+    });
+    console.log(`${max} ${min}`);
+
+    graphRefresh(sample, max + 1, min - 1);
+}
+
+function exponential() {
+    // Collect Data
+    let sample_size = (!document.getElementById("sample_size").value) ? 20 : document.getElementById("sample_size").value;
+    let replace = document.querySelector('input[name="question"]:checked').value;
+
+    let lamb = (!document.getElementById("lamb").value) ? 1 : document.getElementById("lamb").value;
+    console.log(`${lamb}`);
+
+    // Create Data
+    let data = []
+
+    for (let i = 1; i <= 100; ++i) {
+        data.push(d3.randomExponential(lamb)().toFixed(2));
+    }
+
+    // Sample Data
+    sampler(data, sample_size, Boolean(replace));
+
+    // Refresh Graph;
+    let max = 0;
+    let min = 1000000000000;
+    sample.forEach((value) => {
+        let temp = parseFloat(value.value);
+        if (temp > max) {
+            max = temp;
+        }
+        if (temp < min) {
+            min = temp;
+        }
+        console.log(value)
+    });
+    console.log(`${max} ${min}`);
+
+    graphRefresh(sample, max + 1, min - 1);
+}
+
+function graphRefresh(sample, yMax = 100, yMin = 0) {
+    document.getElementById("graphSVG").innerHTML = "";
+    generateGraph(sample, yMax, yMin);
+    sample = [];
+}
+
+function sampler(data, count, replacement = false) {
+    sample = [];
+    for (let i = 0; i < count; ++i) {
+        let index = Math.round(Math.random() * (data.length - 1));
+        if (replacement) {
+            sample.push({ 'id': i + 1, 'value': data[index] });
+        } else {
+            if (data[index] == -1) {
+                while (data[index] == -1) {
+                    index = Math.round(Math.random() * (data.length - 1));
+                }
+                sample.push({ 'id': i + 1, 'value': data[index] });
+            } else {
+                sample.push({ 'id': i + 1, 'value': data[index] });
+            }
+            data[index] = -1;
+        }
+    }
+}
+
+
+function generateGraph(sample, yMax, yMin) {
     const svg = d3.select('svg');
     const svgContainer = d3.select('#container');
 
@@ -61,7 +213,7 @@ function generateGraph() {
 
     const yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain([0, 100]);
+        .domain([yMin, yMax]);
 
     // vertical grid lines
     // const makeXLines = () => d3.axisBottom()
@@ -138,7 +290,6 @@ function generateGraph() {
             //         let text = ''
             //         if (divergence > 0) text += '+'
             //         text += `${divergence}`
-
             //         return idx !== i ? text : '';
             //     })
 
@@ -197,33 +348,4 @@ function generateGraph() {
     //     .attr('text-anchor', 'start')
     //     .text('Source: Stack Overflow, 2018')
 
-}
-
-function randomize() {
-    // sample.forEach(function(item) {
-    //     item['value'] = (Math.random() * 100).toFixed(1);
-    // });
-
-    // stores 100 randomly choosen numbers in temp
-    let temp = [];
-    for(let i=1; i<=100; ++i) {
-        temp.push(i);
-    }
-    
-    for(let i=0; i<20; ++i) {
-        let index = Math.round(Math.random() * 99);   
-        if (temp[index] == -1) {
-            while (temp[index] == -1) {
-                index = Math.round(Math.random() * 99);   
-            }
-            sample.push({'id': i+1, 'value': temp[index]});
-        } else {
-            sample.push({'id': i+1, 'value': temp[index]});
-        }
-        temp[index] = -1;
-    }
-    
-    document.getElementById("graphSVG").innerHTML = "";    
-    generateGraph();
-    sample = [];
 }
