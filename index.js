@@ -1,7 +1,3 @@
-// TODO
-// Fix x axis placement and graph placement for negative numbers
-// let sample = [];
-
 function randomize() {
     // Create Data
     let data = [];
@@ -35,20 +31,6 @@ function normal() {
     const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    // let max = 0;
-    // let min = 0;
-    // sample.forEach((value) => {
-    //     let temp = parseFloat(value.value);
-    //     if (temp > max) {
-    //         max = temp;
-    //     }
-    //     if (temp < min) {
-    //         min = temp;
-    //     }
-    //     console.log(value)
-    // });
-    // console.log(`${max} ${min}`);
-
     graphRefresh(sample);
 
 }
@@ -72,20 +54,6 @@ function uniform() {
     const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    // let max = 0;
-    // let min = 0;
-    // sample.forEach((value) => {
-    //     let temp = parseFloat(value.value);
-    //     if (temp > max) {
-    //         max = temp;
-    //     }
-    //     if (temp < min) {
-    //         min = temp;
-    //     }
-    //     console.log(value)
-    // });
-    // console.log(`${max} ${min}`);
-
     graphRefresh(sample);
 }
 
@@ -107,27 +75,12 @@ function exponential() {
     const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    // let max = 0;
-    // let min = 0;
-    // sample.forEach((value) => {
-    //     let temp = parseFloat(value.value);
-    //     if (temp > max) {
-    //         max = temp;
-    //     }
-    //     if (temp < min) {
-    //         min = temp;
-    //     }
-    //     console.log(value)
-    // });
-    // console.log(`${max} ${min}`);
-
     graphRefresh(sample);
 }
 
 function graphRefresh(sample, yMax = 100, yMin = 0) {
     document.getElementById("graphSVG").innerHTML = "";
     generateGraph(sample);
-    // sample = [];
 }
 
 function sampler(data, count, replacement = false) {
@@ -135,17 +88,14 @@ function sampler(data, count, replacement = false) {
     for (let i = 0; i < count; ++i) {
         let index = Math.round(Math.random() * (data.length - 1));
         if (replacement) {
-            // sample.push({ 'id': i + 1, 'value': data[index] });
             sample.push(data[index]);
         } else {
             if (data[index] == -1) {
                 while (data[index] == -1) {
                     index = Math.round(Math.random() * (data.length - 1));
                 }
-                // sample.push({ 'id': i + 1, 'value': data[index] });
                 sample.push(data[index]);
             } else {
-                // sample.push({ 'id': i + 1, 'value': data[index] });
                 sample.push(data[index]);
             }
             data[index] = -1;
@@ -154,8 +104,6 @@ function sampler(data, count, replacement = false) {
     return sample;
 }
 
-
-// function generateGraph(data, yMax, yMin) {
 function generateGraph(data) {
     let y0 = Math.max(Math.abs(Math.min(...data)), Math.abs(Math.max(...data)));
 
@@ -173,8 +121,6 @@ function generateGraph(data) {
         .domain(d3.range(data.length))
         .rangeRound([0, width])
         .padding(0.2);
-    //.range([0, width])
-    //.padding(0.4)
 
     const yScale = d3.scaleLinear()
         .range([height, 0])
@@ -200,22 +146,6 @@ function generateGraph(data) {
         .attr("x1", 0)
         .attr("x2", width);
 
-    // chart.append('g')
-    //     .attr('transform', `translate(0, ${height})`)
-    //     .call(d3.axisBottom(xScale));
-
-    // chart.append('g')
-    //     .call(d3.axisLeft(yScale));
-
-    // vertical grid lines
-    // chart.append('g')
-    //   .attr('class', 'grid')
-    //   .attr('transform', `translate(0, ${height})`)
-    //   .call(makeXLines()
-    //     .tickSize(-height, 0, 0)
-    //     .tickFormat('')
-    //   )
-
     chart.append('g')
         .attr('class', 'grid')
         .call(makeYLines
@@ -235,13 +165,9 @@ function generateGraph(data) {
         .attr('y', (g) => yScale(Math.max(0, g)))
         .attr('height', (g) => Math.abs(yScale(g) - yScale(0)))
         .attr('width', xScale.bandwidth())
-        // .attr('x', (g) => xScale(g.id))
-        // .attr('y', (g) => yScale(g.value))
-        // .attr('height', (g) => height - yScale(g.value))
-        // .attr('width', xScale.bandwidth())
         .on('mouseenter', function (actual, i) {
-            // d3.selectAll('.value')
-            //     .attr('opacity', 0)
+            d3.selectAll('.value')
+                .attr('opacity', 0)
 
             d3.select(this)
                 .transition()
@@ -253,7 +179,6 @@ function generateGraph(data) {
                 // .attr('x', (a) => xScale(a.id) - 5)
                 //.attr('width', xScale.bandwidth() + 10)
 
-            //const y = yScale(actual.value)
             const y = yScale(actual);
             
 
@@ -263,21 +188,6 @@ function generateGraph(data) {
                 .attr('y1', y)
                 .attr('x2', width)
                 .attr('y2', y)
-
-            // barGroups.append('text')
-            //     .attr('class', 'divergence')
-            //     .attr('x', (a) => xScale(a.id) + xScale.bandwidth() / 2)
-            //     .attr('y', (a) => yScale(a.value) + 30)
-            //     .attr('fill', 'white')
-            //     .attr('text-anchor', 'middle')
-            //     .text((a, idx) => {
-            //         const divergence = (a.value - actual.value).toFixed(1)
-
-            //         let text = ''
-            //         if (divergence > 0) text += '+'
-            //         text += `${divergence}`
-            //         return idx !== i ? text : '';
-            //     })
 
         })
         .on('mouseleave', function () {
@@ -326,12 +236,4 @@ function generateGraph(data) {
         .attr('y', 40)
         .attr('text-anchor', 'middle')
         .text('Random Sample Visualizer')
-
-    // svg.append('text')
-    //     .attr('class', 'source')
-    //     .attr('x', width - margin / 2)
-    //     .attr('y', height + margin * 1.7)
-    //     .attr('text-anchor', 'start')
-    //     .text('Source: Stack Overflow, 2018')
-
 }
