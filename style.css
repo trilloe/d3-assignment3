@@ -18,7 +18,11 @@ svg {
   height: 100%;
 }
 
-.bar {
+.bar_positive {
+  fill: #80cbc4;
+}
+
+.bar_negative {
   fill: #80cbc4;
 }
 
@@ -93,3 +97,22 @@ input{
 table{
   width: max-content;
 }
+/* 
+.bar-positive {
+  fill: steelblue;
+}
+
+.bar_negative {
+  fill: brown;
+} */
+
+/* .axis text {
+  font: 10px sans-serif;
+} */
+/* 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+} */

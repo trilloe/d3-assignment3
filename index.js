@@ -153,7 +153,11 @@ function sampler(data, count, replacement = false) {
 }
 
 
-function generateGraph(sample, yMax, yMin) {
+// function generateGraph(data, yMax, yMin) {
+function generateGraph(data) {
+    data = [-15, -20, -22, -18, 2, 6, -26, -18, -50];
+    let y0 = Math.max(Math.abs(d3.min(data)), Math.abs(d3.max(data)));
+
     const svg = d3.select('svg');
     const svgContainer = d3.select('#container');
 
@@ -165,27 +169,42 @@ function generateGraph(sample, yMax, yMin) {
         .attr('transform', `translate(${margin}, ${margin})`);
 
     const xScale = d3.scaleBand()
-        .range([0, width])
-        .domain(sample.map((s) => s.id))
-        .padding(0.4)
+        .domain(d3.range(data.length))
+        .rangeRound([0, width])
+        .padding(0.2);
+    //.range([0, width])
+    //.padding(0.4)
 
     const yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain([yMin, yMax]);
+        .domain([-y0, y0])
+        .nice();
 
     // vertical grid lines
     // const makeXLines = () => d3.axisBottom()
     //   .scale(xScale)
 
-    const makeYLines = () => d3.axisLeft()
+    const makeYLines = d3.axisLeft()
         .scale(yScale)
 
-    chart.append('g')
-        .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(xScale));
+    chart.append("g")
+        .attr("class", "x axis")
+        .call(makeYLines);
 
-    chart.append('g')
-        .call(d3.axisLeft(yScale));
+    chart.append("g")
+        .attr("class", "y axis")
+        .append("line")
+        .attr("y1", yScale(0))
+        .attr("y2", yScale(0))
+        .attr("x1", 0)
+        .attr("x2", width);
+
+    // chart.append('g')
+    //     .attr('transform', `translate(0, ${height})`)
+    //     .call(d3.axisBottom(xScale));
+
+    // chart.append('g')
+    //     .call(d3.axisLeft(yScale));
 
     // vertical grid lines
     // chart.append('g')
@@ -198,23 +217,27 @@ function generateGraph(sample, yMax, yMin) {
 
     chart.append('g')
         .attr('class', 'grid')
-        .call(makeYLines()
+        .call(makeYLines
             .tickSize(-width, 0, 0)
             .tickFormat('')
         )
 
     const barGroups = chart.selectAll()
-        .data(sample)
+        .data(data)
         .enter()
         .append('g')
-
+    
     barGroups
         .append('rect')
-        .attr('class', 'bar')
-        .attr('x', (g) => xScale(g.id))
-        .attr('y', (g) => yScale(g.value))
-        .attr('height', (g) => height - yScale(g.value))
+        .attr('class', (g) => (g<0) ? 'bar_negative':'bar_positive')
+        .attr('x', (g, i) => xScale(i))
+        .attr('y', (g) => yScale(Math.max(0, g)))
+        .attr('height', (g) => Math.abs(yScale(g) - yScale(0)))
         .attr('width', xScale.bandwidth())
+        // .attr('x', (g) => xScale(g.id))
+        // .attr('y', (g) => yScale(g.value))
+        // .attr('height', (g) => height - yScale(g.value))
+        // .attr('width', xScale.bandwidth())
         .on('mouseenter', function (actual, i) {
             // d3.selectAll('.value')
             //     .attr('opacity', 0)
@@ -224,10 +247,14 @@ function generateGraph(sample, yMax, yMin) {
                 .duration(300)
                 .attr('opacity', 0.6)
                 .style('fill', 'orange')
-                .attr('x', (a) => xScale(a.id) - 5)
-                .attr('width', xScale.bandwidth() + 10)
+                //.attr('x', (g, a) => xScale(a) + xScale.bandwidth() / 2)
+                //.attr('x', (g, a) => xScale(a))
+                // .attr('x', (a) => xScale(a.id) - 5)
+                //.attr('width', xScale.bandwidth() + 10)
 
-            const y = yScale(actual.value)
+            //const y = yScale(actual.value)
+            const y = yScale(actual);
+            
 
             line = chart.append('line')
                 .attr('id', 'limit')
@@ -261,7 +288,7 @@ function generateGraph(sample, yMax, yMin) {
                 .duration(300)
                 .attr('opacity', 1)
                 .style('fill', 'rgb(128, 203, 196)')
-                .attr('x', (a) => xScale(a.id))
+                //.attr('x', (a) => xScale(a))
                 .attr('width', xScale.bandwidth())
 
             chart.selectAll('#limit').remove()
@@ -271,10 +298,10 @@ function generateGraph(sample, yMax, yMin) {
     barGroups
         .append('text')
         .attr('class', 'value')
-        .attr('x', (a) => xScale(a.id) + xScale.bandwidth() / 2)
-        .attr('y', (a) => yScale(a.value) - 10)
+        .attr('x', (g, a) => xScale(a) + xScale.bandwidth() / 2)
+        .attr('y', (a) => (a > 0) ? yScale(a) - 10: yScale(Math.min(0, a)) + 20)
         .attr('text-anchor', 'middle')
-        .text((a) => `${a.value}`)
+        .text((a) => `${a}`)
 
     svg
         .append('text')
