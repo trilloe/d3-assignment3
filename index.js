@@ -1,6 +1,6 @@
 // TODO
 // Fix x axis placement and graph placement for negative numbers
-let sample = [];
+// let sample = [];
 
 function randomize() {
     // Create Data
@@ -10,8 +10,8 @@ function randomize() {
     }
 
     // Sample Data
-    sampler(data, 20, false);
-
+    const sample = sampler(data, 20, false);
+    
     // Refresh Graph
     graphRefresh(sample);
 }
@@ -23,7 +23,6 @@ function normal() {
 
     let mean = (!document.getElementById("n_mean").value) ? 0 : document.getElementById("n_mean").value;
     let sd = (!document.getElementById("n_sd").value) ? 1 : document.getElementById("n_sd").value;
-    console.log(`${mean}   ${sd}`);
 
     // Create Data
     let data = []
@@ -33,24 +32,24 @@ function normal() {
     }
 
     // Sample Data
-    sampler(data, sample_size, Boolean(replace));
+    const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    let max = 0;
-    let min = 0;
-    sample.forEach((value) => {
-        let temp = parseFloat(value.value);
-        if (temp > max) {
-            max = temp;
-        }
-        if (temp < min) {
-            min = temp;
-        }
-        console.log(value)
-    });
-    console.log(`${max} ${min}`);
+    // let max = 0;
+    // let min = 0;
+    // sample.forEach((value) => {
+    //     let temp = parseFloat(value.value);
+    //     if (temp > max) {
+    //         max = temp;
+    //     }
+    //     if (temp < min) {
+    //         min = temp;
+    //     }
+    //     console.log(value)
+    // });
+    // console.log(`${max} ${min}`);
 
-    graphRefresh(sample, max + 1, min - 1);
+    graphRefresh(sample);
 
 }
 
@@ -70,24 +69,24 @@ function uniform() {
     }
 
     // Sample Data
-    sampler(data, sample_size, Boolean(replace));
+    const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    let max = 0;
-    let min = 0;
-    sample.forEach((value) => {
-        let temp = parseFloat(value.value);
-        if (temp > max) {
-            max = temp;
-        }
-        if (temp < min) {
-            min = temp;
-        }
-        console.log(value)
-    });
-    console.log(`${max} ${min}`);
+    // let max = 0;
+    // let min = 0;
+    // sample.forEach((value) => {
+    //     let temp = parseFloat(value.value);
+    //     if (temp > max) {
+    //         max = temp;
+    //     }
+    //     if (temp < min) {
+    //         min = temp;
+    //     }
+    //     console.log(value)
+    // });
+    // console.log(`${max} ${min}`);
 
-    graphRefresh(sample, max + 1, min - 1);
+    graphRefresh(sample);
 }
 
 function exponential() {
@@ -96,7 +95,6 @@ function exponential() {
     let replace = document.querySelector('input[name="question"]:checked').value;
 
     let lamb = (!document.getElementById("lamb").value) ? 1 : document.getElementById("lamb").value;
-    console.log(`${lamb}`);
 
     // Create Data
     let data = []
@@ -106,30 +104,30 @@ function exponential() {
     }
 
     // Sample Data
-    sampler(data, sample_size, Boolean(replace));
+    const sample = sampler(data, sample_size, Boolean(replace));
 
     // Refresh Graph;
-    let max = 0;
-    let min = 0;
-    sample.forEach((value) => {
-        let temp = parseFloat(value.value);
-        if (temp > max) {
-            max = temp;
-        }
-        if (temp < min) {
-            min = temp;
-        }
-        console.log(value)
-    });
-    console.log(`${max} ${min}`);
+    // let max = 0;
+    // let min = 0;
+    // sample.forEach((value) => {
+    //     let temp = parseFloat(value.value);
+    //     if (temp > max) {
+    //         max = temp;
+    //     }
+    //     if (temp < min) {
+    //         min = temp;
+    //     }
+    //     console.log(value)
+    // });
+    // console.log(`${max} ${min}`);
 
-    graphRefresh(sample, max + 1, min - 1);
+    graphRefresh(sample);
 }
 
 function graphRefresh(sample, yMax = 100, yMin = 0) {
     document.getElementById("graphSVG").innerHTML = "";
-    generateGraph(sample, yMax, yMin);
-    sample = [];
+    generateGraph(sample);
+    // sample = [];
 }
 
 function sampler(data, count, replacement = false) {
@@ -137,26 +135,29 @@ function sampler(data, count, replacement = false) {
     for (let i = 0; i < count; ++i) {
         let index = Math.round(Math.random() * (data.length - 1));
         if (replacement) {
-            sample.push({ 'id': i + 1, 'value': data[index] });
+            // sample.push({ 'id': i + 1, 'value': data[index] });
+            sample.push(data[index]);
         } else {
             if (data[index] == -1) {
                 while (data[index] == -1) {
                     index = Math.round(Math.random() * (data.length - 1));
                 }
-                sample.push({ 'id': i + 1, 'value': data[index] });
+                // sample.push({ 'id': i + 1, 'value': data[index] });
+                sample.push(data[index]);
             } else {
-                sample.push({ 'id': i + 1, 'value': data[index] });
+                // sample.push({ 'id': i + 1, 'value': data[index] });
+                sample.push(data[index]);
             }
             data[index] = -1;
         }
-    }
+    }    
+    return sample;
 }
 
 
 // function generateGraph(data, yMax, yMin) {
 function generateGraph(data) {
-    data = [-15, -20, -22, -18, 2, 6, -26, -18, -50];
-    let y0 = Math.max(Math.abs(d3.min(data)), Math.abs(d3.max(data)));
+    let y0 = Math.max(Math.abs(Math.min(...data)), Math.abs(Math.max(...data)));
 
     const svg = d3.select('svg');
     const svgContainer = d3.select('#container');
@@ -177,7 +178,7 @@ function generateGraph(data) {
 
     const yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain([-y0, y0])
+        .domain([(Math.min(...data) < 0) ? -y0: 0, y0])
         .nice();
 
     // vertical grid lines
